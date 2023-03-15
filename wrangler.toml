@@ -1,0 +1,9 @@
+name = "profile"
+main = "./.output/server/index.mjs"
+workers_dev = true
+compatibility_date = "2022-09-10"
+account_id = "306536236b25a782cb379f49cf0990e6"
+#route = "<mainly useful when you want to setup custom domains (optional too)>"
+
+[site]
+bucket = ".output/public"
