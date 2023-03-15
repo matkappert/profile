@@ -10,6 +10,12 @@ export default <Partial<Config>>{
       black: colors.neutral[900],
       white: colors.neutral[200],
       gray: colors.neutral,
+      indigo: colors.indigo,
+      violet: colors.violet,
+
+      red: colors.red,
+      green: colors.green,
+      blue: colors.blue,
     },
 
   },
