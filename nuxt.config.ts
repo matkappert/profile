@@ -4,14 +4,14 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
   ],
   extends: [
-    'nuxt-seo-kit',
-    '../nuxt-ui/',
+    // 'nuxt-seo-kit',
+    // '../nuxt-ui/',
     // 'github:matkappert/nuxt-ui#main',
   ],
   alias: {
     'class-variance-authority': require.resolve('class-variance-authority'),
-    'tailwindcss': require.resolve('tailwindcss/lib/index.js'),
-    'tailwindcss/colors': require.resolve('tailwindcss/colors.js'),
+    // 'tailwindcss': require.resolve('tailwindcss/lib/index.js'),
+    // 'tailwindcss/colors': require.resolve('tailwindcss/colors.js'),
   },
   ssr: true,
   nitro: {
