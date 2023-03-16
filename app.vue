@@ -8,7 +8,7 @@
 
 <template>
   <div class="relative">
-    <!-- <SeoKit /> -->
+    <SeoKit />
 
     <!-- blur -->
     <div class="backdrop-blur-3xl min-h-screen overflow-hidden h-full">

@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     'nuxt-icon',
   ],
   extends: [
-    // 'nuxt-seo-kit',
+    'nuxt-seo-kit',
     // '../nuxt-ui/',
     // 'github:matkappert/nuxt-ui#main',
   ],
