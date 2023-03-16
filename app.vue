@@ -19,7 +19,7 @@
           <div class="grow">
           </div>
           <div class="">
-            <!-- <Social /> -->
+            <Social />
           </div>
         </div>
       </div>
