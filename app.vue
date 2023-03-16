@@ -1,14 +1,15 @@
 <script setup lang="ts">
-// useSeoMeta({
-//   title: 'Welcome',
-//   description: 'Mat Kappert; Experienced software developer and electronic technician with a diverse skill set.',
-// });
+useSeoMeta({
+  title: 'Welcome',
+  description: 'Mat Kappert; Experienced software developer and electronic technician with a diverse skill set.',
+});
 
 </script>
 
 <template>
   <div class="relative">
     <SeoKit />
+    <Spotlight />
 
     <!-- blur -->
     <div class="backdrop-blur-3xl min-h-screen overflow-hidden h-full">
