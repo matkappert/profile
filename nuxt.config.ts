@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
+    '@nuxtjs/tailwindcss',
+    'nuxt-headlessui',
+    'nuxt-icon',
   ],
   extends: [
     // 'nuxt-seo-kit',
