@@ -1,5 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  typescript: {
+    strict: true,
+    typeCheck: true,
+  },
   modules: [
     '@vueuse/nuxt',
     '@nuxtjs/tailwindcss',
@@ -8,7 +12,7 @@ export default defineNuxtConfig({
   ],
   extends: [
     'nuxt-seo-kit',
-    // '../nuxt-ui/',
+    '../nuxt-ui/',
     // 'github:matkappert/nuxt-ui#main',
   ],
   alias: {
@@ -18,7 +22,6 @@ export default defineNuxtConfig({
   },
   ssr: true,
   nitro: {
-    // preset: 'cloudflare',
     preset: 'cloudflare_pages',
     devProxy: {
       '/api': {
@@ -38,5 +41,5 @@ export default defineNuxtConfig({
   },
   linkChecker: {
     failOn404: true,
-  }
+  },
 });
