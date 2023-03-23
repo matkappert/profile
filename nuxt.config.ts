@@ -20,6 +20,12 @@ export default defineNuxtConfig({
   nitro: {
     // preset: 'cloudflare',
     preset: 'cloudflare_pages',
+    devProxy: {
+      '/api': {
+        target: 'http://localhost:8788/api',
+        changeOrigin: true,
+      },
+    },
   },
   runtimeConfig: {
     public: {
