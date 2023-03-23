@@ -5,11 +5,13 @@
 import tRPCPlugin from 'cloudflare-pages-plugin-trpc';
 import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 import { router, createContext } from '../trpc/trpc';
+import contact from './routers/contact';
 
 // ┬─┐┌─┐┬ ┬┌┬┐┌─┐┬─┐
 // ├┬┘│ ││ │ │ ├┤ ├┬┘
 // ┴└─└─┘└─┘ ┴ └─┘┴└─
 const appRouter = router({
+  contact,
 });
 
 export type AppRouter = typeof appRouter;
