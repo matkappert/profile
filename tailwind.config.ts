@@ -3,6 +3,11 @@ import colors from 'tailwindcss/colors';
 // import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default <Partial<Config>>{
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/container-queries'),
+    require('@headlessui/tailwindcss'),
+  ],
   theme: {
     colors: {
       transparent: 'transparent',
