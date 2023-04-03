@@ -61,7 +61,7 @@
         ],
     },
     "component": {
-        "prefix": "script",
+        "prefix": "script setup - component",
         "scope": "vue",
         "body": [
             "<script setup lang=\"ts\">",
@@ -96,8 +96,8 @@
             "</template>",
         ],
     },
-    "script setup": {
-        "prefix": "script",
+    "page": {
+        "prefix": "script setup - page",
         "scope": "vue",
         "body": [
             "<script setup lang=\"ts\">",
