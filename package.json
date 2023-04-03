@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230307.0",
+    "@formkit/auto-animate": "^1.0.0-beta.6",
     "@headlessui/tailwindcss": "^0.1.2",
     "@nuxtjs/eslint-config": "^12.0.0",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
