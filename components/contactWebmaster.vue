@@ -1,39 +1,32 @@
 <script setup lang="ts">
-import type { RouterInput } from '~~/functions/api/[[trpc]]';
+import { ContactSchema } from '~/schemas';
+import type { RouterInput } from '~/functions/api/[[trpc]]';
+type ContactInput = RouterInput['contact']['webmaster']
 
 //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
 //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
 //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
 const { $trpc } = useNuxtApp();
-const error = ref<string|null>(null);
-const response = ref<string|null>(null);
-const cloudSync = ref(false);
-
-const formData = ref<RouterInput['contact']['webmaster']>({
-  name: 'mat',
-  email: 'mat@example.com',
-  message: 'Hello World!',
-});
+const syncing = ref(false);
+const cloudErrors = ref<string|null>(null);
+const sender = ref<string|null>(null);
 
 //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
 //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
 //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
-const handelSubmit = async() => {
-  console.log('handel sent email');
-  cloudSync.value = true;
-  error.value = null;
-  response.value = null;
+const sendForm = async(data: ContactInput) => {
+  syncing.value = true;
+  cloudErrors.value = null;
   try {
-    console.log('sending', formData.value);
-    const result = await $trpc.contact.webmaster.mutate(formData.value);
-    response.value = result.message ?? null;
-    console.log('result', result);
-  } catch (e) {
-    console.error(e);
-    error.value = JSON.stringify(e);
+    await $trpc.contact.webmaster.mutate(data);
+    sender.value = data.name;
+  } catch (err) {
+    console.error(err);
+    cloudErrors.value = JSON.stringify(err);
   }
-  cloudSync.value = false;
+  syncing.value = false;
 };
+
 </script>
 <!--
   ╦ ╦╔╦╗╔╦╗╦
@@ -41,21 +34,50 @@ const handelSubmit = async() => {
   ╩ ╩ ╩ ╩ ╩╩═╝
   -->
 <template>
-  <div class="mt-4">
-    <UiButton
-      :disabled="cloudSync"
-      @click="handelSubmit">
-      contact
-    </UiButton>
-    <div
-      v-if="response"
-      class="bg-green-500/50 w-full">
-      Response: {{ response }}
-    </div>
-    <div
-      v-if="error"
-      class="bg-red-500 w-full">
-      <p>Error:  {{ error }}</p>
+  <div class="dark:text-white text:black ">
+    <div class="rounded-lg p-4 bg-gray-50 dark:bg-gray-900 shadow-xl">
+      <UiForm
+        v-if="!sender"
+        id="contact"
+        class=" flex flex-col space-y-2"
+        :schema="ContactSchema"
+        :syncing="syncing"
+        @submit="$event => sendForm($event as ContactInput)">
+        <h2 class="text-lg font-semibold">
+          Get in touch
+        </h2>
+        <UiFormInputHeader
+          id="name"
+          title="full name">
+          <UiFormInputText :disabled="syncing" />
+        </UiFormInputHeader>
+
+        <UiFormInputHeader
+          id="email"
+          title="email">
+          <UiFormInputText :disabled="syncing" />
+        </UiFormInputHeader>
+
+        <UiFormInputHeader
+          id="message"
+          title="message">
+          <UiFormInputText
+            class="h-24"
+            as="textarea"
+            :disabled="syncing" />
+        </UiFormInputHeader>
+
+        <div
+          v-if="cloudErrors"
+          class="bg-red-500/50 rounded-md p-2 text-sm overflow-scroll">
+          Error: <pre>{{ cloudErrors }}</pre>
+        </div>
+      </UiForm>
+      <p
+        v-else
+        class="text-center">
+        Thanks {{ sender }}, message has be sent.
+      </p>
     </div>
   </div>
 </template>

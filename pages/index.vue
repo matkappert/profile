@@ -36,7 +36,9 @@
           Let me bring my expertise to your project and help you achieve your goals.<br>
         </p>
 
-        <ContactWebmaster class="mt-4" />
+        <ContactWebmaster class="mt-20 max-w-lg mx-auto" />
+
+        <div class="h-40"></div>
       </div>
     </div>
   </div>

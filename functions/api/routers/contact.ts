@@ -1,8 +1,8 @@
-import { z } from 'zod';
 import { ofetch } from 'ofetch';
 import { TRPCError } from '@trpc/server';
 import { publicProcedure, router } from '../../trpc/trpc';
 import { replaceText } from '~/utils';
+import { ContactSchema } from '~/schemas';
 
 const template = `
 <!DOCTYPE html>
@@ -32,6 +32,7 @@ interface ReturnType {
    id?: string,
    message?: string,
 }
+
 // ╔═╗╔═╗╔╗╔╔╦╗╔═╗╔═╗╔╦╗
 // ║  ║ ║║║║ ║ ╠═╣║   ║
 // ╚═╝╚═╝╝╚╝ ╩ ╩ ╩╚═╝ ╩
@@ -44,13 +45,7 @@ export default router({
     // ┬┌┐┌┌─┐┬ ┬┌┬┐
     // ││││├─┘│ │ │
     // ┴┘└┘┴  └─┘ ┴
-    .input(
-      z.object({
-        email: z.string().email(),
-        name: z.string().min(3).max(128),
-        message: z.string().min(3).max(512),
-      })
-    )
+    .input(ContactSchema)
 
     // ┌┬┐┬ ┬┌┬┐┌─┐┌┬┐┬┌─┐┌┐┌
     // ││││ │ │ ├─┤ │ ││ ││││
