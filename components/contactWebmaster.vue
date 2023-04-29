@@ -35,7 +35,7 @@ const sendForm = async(data: ContactInput) => {
   -->
 <template>
   <div class="dark:text-white text:black ">
-    <div class="rounded-lg p-4 bg-gray-50 dark:bg-gray-900 shadow-xl">
+    <div class="rounded-lg p-4 bg-neutral-50 dark:bg-neutral-900 shadow-xl">
       <UiForm
         v-if="!sender"
         id="contact"

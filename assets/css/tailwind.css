@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @media (prefers-color-scheme: dark) {
-    :root { background-color: theme('colors.gray.950') !important;}
+    :root { background-color: theme('colors.neutral.950') !important;}
 }
 @media (prefers-color-scheme: light) {
-    :root { background-color: theme('colors.gray.100') !important;}
+    :root { background-color: theme('colors.neutral.100') !important;}
 }
