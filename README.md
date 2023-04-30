@@ -1,5 +1,3 @@
-[![ESLint and Type Check](https://github.com/matkappert/profile/actions/workflows/lint-and-typecheck.yaml/badge.svg)](https://github.com/matkappert/profile/actions/workflows/lint-and-typecheck.yaml)
-
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
