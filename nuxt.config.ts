@@ -1,6 +1,3 @@
-// import { createResolver } from '@nuxt/kit';
-// const { resolve } = createResolver(import.meta.url);
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
@@ -11,18 +8,7 @@ export default defineNuxtConfig({
   ],
   extends: [
     'nuxt-seo-kit',
-    // '../nuxt-ui/',
-    // 'github:matkappert/nuxt-ui#master',
   ],
-  alias: {
-    // 'class-variance-authority': require.resolve('class-variance-authority'),
-    // 'tailwindcss': require.resolve('tailwindcss/lib/index.js'),
-    // 'tailwindcss/colors': require.resolve('tailwindcss/colors.js'),
-    // 'zod': 'zod',
-    // 'class-variance-authorit': 'class-variance-authorit',
-    // 'tailwindcss': 'tailwindcss',
-    // 'tailwindcss/colors': 'tailwindcss/colors',
-  },
   ssr: true,
   nitro: {
     devProxy: {
