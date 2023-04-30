@@ -15,7 +15,11 @@ export interface Env {
   MAILGUN_API_ENDPOINT: string,
   MAILGUN_API_KEY: string;
   WEBMASTER_EMAIL: string;
+  OPENAI_API_KEY: string;
+  OPENAI_MODEL?: string;
+  AXIOM_API_KEY?: string;
 }
+
 export const createContext = ({ req, env }: FetchCreateContextWithCloudflareEnvFnOptions<Env>) => {
   const logger = async(dataset: string, data: unknown[]) => {
     const result = await ofetch(`https://api.axiom.co/v1/datasets/${dataset}/ingest`, {
