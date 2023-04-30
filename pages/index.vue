@@ -21,8 +21,10 @@ onMounted(() => {
 <template>
   <div class="w-full text-black dark:text-white">
     <!-- social links -->
-    <div class="hidden lg:flex max-w-6xl content-end mx-auto px-4">
-      <Social class="ml-auto " />
+    <div class="fixed top-0 w-full">
+      <div class="hidden lg:flex max-w-6xl content-end mx-auto px-4">
+        <Social class="ml-auto" />
+      </div>
     </div>
     <div class="flex lg:h-screen justify-center items-center">
       <div class="flex flex-col w-full min-h-screen lg:min-h-min lg:max-w-3xl 2xl:max-w-6xl lg:h-5/6 2xl:h-3/4 bg-neutral-50 dark:bg-neutral-900 lg:rounded-xl lg:m-4 lg:overflow-hidden relative shadow-xl">
