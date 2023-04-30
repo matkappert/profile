@@ -1,112 +1,15 @@
 <script setup lang="ts">
-import { ChatSchema } from '~~/schemas';
 
-type Message = {role:'assistant'|'user'|'error', content: string};
-const messages = ref<Message[]>([]);
+const chat = useChat();
+const introduction = chat.introduction();
 
-const { $trpc } = useNuxtApp();
-const isSyncing = ref(false);
-const inputValue = ref('');
-const { textarea, triggerResize } = useTextareaAutosize({ input: inputValue });
-
-let sessionId: string|undefined;
-// TODO: store sessionID and convocations.
-
-const askQuestion = async() => {
-  const value = ChatSchema.pick({ content: true }).safeParse({ content: inputValue.value });
-
-  if (!value.success || isRunningDemo.value) {
-    return;
-  }
-  const data = {
-    // context: messages.value.slice(-5).map(messages => `${messages.role}: ${messages.content}`).join('\n'),
-    content: value.data.content,
-    sessionId,
-  };
-
-  inputValue.value = '';
-  nextTick(triggerResize);
-  messages.value.push({ role: 'user', content: data.content });
-
-  isSyncing.value = true;
-
-  try {
-    const response = await $trpc.chat.post.mutate(data);
-    messages.value.push({ role: 'assistant', content: response.response });
-    sessionId = response.sessionId;
-  } catch (err) {
-    console.error(err);
-    messages.value.push({ role: 'error', content: JSON.stringify(err) });
-  }
-  isSyncing.value = false;
-};
-
-const introduction: Message[] = [
-  { role: 'assistant', content: 'Hi there! 👋' },
-  { role: 'assistant', content: 'I\'m Mat, a chat bot designed to provide information about myself.' },
-  { role: 'assistant', content: 'What would you like to know about me?' },
-  { role: 'user', content: 'Can you tell me more about your work experience?' },
-  { role: 'assistant', content: 'Sure! Here are some highlights of my work experience:' },
-  { role: 'assistant', content: '- Full-stack software developer at Great Big Events from 2022 to 2023.' },
-  { role: 'assistant', content: '- Electronic/service technician at EI Productions from 2012 to 2022.' },
-  { role: 'assistant', content: '- Vision technician at EI Productions from 2012 to 2022.' },
-  { role: 'assistant', content: '- Developer/electronic technician for my own business from 2011 to 2022.' },
-  { role: 'user', content: 'What technical skills do you possess?' },
-  { role: 'assistant', content: 'I have a diverse skill set and experience in several areas of web development. Here are some of my technical skills:' },
-  { role: 'assistant', content: '- JavaScript, TypeScript, GraphQL, C/C++, and Bash.' },
-  { role: 'assistant', content: '- Backend technologies such as Nuxt, Sails.JS, AWS CDK, Cloudflare Workers, and Express.JS.' },
-  { role: 'assistant', content: '- Frontend technologies like Vue, URQL, Pinia, Tauri, and Tailwind.' },
-  { role: 'user', content: 'Where are you located?' },
-  { role: 'assistant', content: 'I\'m currently located in the Greater Sydney region of New South Wales, Australia.' },
-  { role: 'user', content: 'Are you available for hire?' },
-  { role: 'assistant', content: 'Yes, I am currently available for hire.' },
-  { role: 'assistant', content: 'If you\'re interested in working with me, you can contact me through my email\nmail@matkappert.com' },
-  { role: 'user', content: 'Thank you.' },
-  { role: 'assistant', content: 'You\'re welcome! Do you have any more questions?' },
-];
-
-const isRunningDemo = ref(true);
-const convocationStarter = async() => {
-  isSyncing.value = false;
-
-  if (!introduction.length || !isRunningDemo.value) {
-    isRunningDemo.value = false;
-    return;
-  }
-  const message = introduction.shift();
-  if (!message) { return; }
-
-  if (message?.role === 'user') {
-    // wait: read last message.
-    await useSleep(messages.value.slice(-1)[0].content.length * 10);
-    const words = message.content.split(/\s+/);
-    for (const word of words) {
-      inputValue.value += word + ' ';
-      // wait: typing speed.
-      await useSleep(word.length * 40);
-    }
-    inputValue.value = '';
-    nextTick(triggerResize);
-    messages.value.push(message);
-    convocationStarter();
-  } else {
-    isSyncing.value = true;
-    // wait: fixed time for response.
-    await useSleep(1_500);
-    isSyncing.value = false;
-    message && messages.value.push(message);
-    convocationStarter();
-  }
-};
-
+//  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
+//  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
+//  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
 onMounted(() => {
-  convocationStarter();
-  window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && isRunningDemo.value) {
-      isRunningDemo.value = false;
-      messages.value.push(...introduction);
-    }
-  });
+  if (!chat.convocation.value.length) {
+    introduction.start();
+  }
 });
 
 </script>
@@ -117,6 +20,12 @@ onMounted(() => {
   -->
 <template>
   <div class="w-full text-black dark:text-white">
+    <!-- social links -->
+    <div class="fixed top-0 w-full">
+      <div class="hidden lg:flex max-w-6xl content-end mx-auto px-4">
+        <Social class="ml-auto" />
+      </div>
+    </div>
     <div class="flex lg:h-screen justify-center items-center">
       <div class="flex flex-col w-full min-h-screen lg:min-h-min lg:max-w-3xl 2xl:max-w-6xl lg:h-5/6 2xl:h-3/4 bg-neutral-50 dark:bg-neutral-900 lg:rounded-xl lg:m-4 lg:overflow-hidden relative shadow-xl">
         <!-- Chat Container -->
@@ -125,12 +34,12 @@ onMounted(() => {
             v-auto-animate
             class="pb-1 last:snap-end scroll-m-20 space-y-4">
             <ChatMessage
-              v-for="(message, index) in messages"
+              v-for="(message, index) in chat.convocation.value"
               :key="index"
               :value="message.content"
               :intent="message.role" />
 
-            <ChatMessage v-if="isSyncing">
+            <ChatMessage v-if="chat.isSyncing.value">
               <ChatJumpingDots class="mx-2" />
             </ChatMessage>
           </div>
@@ -159,18 +68,17 @@ onMounted(() => {
         <div class="fixed lg:absolute bottom-0 inset-x-0 bg-neutral-200/70 dark:bg-neutral-800/70 backdrop-blur-2xl py-2 shadow-md px-2 lg:px-4 overflow-hidden ">
           <div class="flex items-center space-x-2 h-full">
             <textarea
-              ref="textarea"
-              v-model="inputValue"
-              :disabled="isRunningDemo"
+              :ref="chat.textarea"
+              v-model="chat.inputValue.value"
               class="resize-none block w-full min-h-12 lg:min-h-8 bg-neutral-50 dark:bg-neutral-900 rounded-xl focus:ring-violet-500 focus:dark:ring-indigo-600 focus:ring-1 border-none"
-              @keydown.ctrl.enter="askQuestion"
-              @keydown.meta.enter="askQuestion"></textarea>
+              @keydown.ctrl.enter="chat.postMessage"
+              @keydown.meta.enter="chat.postMessage"></textarea>
 
             <button
               class="bg-violet-500 dark:bg-indigo-600 text-white rounded-xl h-12 lg:h-7 w-20 lg:w-16 overflow-hidden "
-              @click="askQuestion">
+              @click="chat.postMessage">
               <ChatJumpingDots
-                v-if="isRunningDemo"
+                v-if="chat.isIntroducing.value"
                 class="mx-auto"
                 dot-class="bg-white" />
               <span v-else>Send</span>
