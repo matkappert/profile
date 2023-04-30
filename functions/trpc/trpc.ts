@@ -9,24 +9,34 @@
  */
 import { initTRPC, inferAsyncReturnType } from '@trpc/server';
 import { FetchCreateContextWithCloudflareEnvFnOptions } from 'cloudflare-pages-plugin-trpc';
+import { ofetch } from 'ofetch';
 
 export interface Env {
   MAILGUN_API_ENDPOINT: string,
   MAILGUN_API_KEY: string;
   WEBMASTER_EMAIL: string;
 }
-export const createContext = ({
-  req,
-  env,
-}: FetchCreateContextWithCloudflareEnvFnOptions<Env>) => {
+export const createContext = ({ req, env }: FetchCreateContextWithCloudflareEnvFnOptions<Env>) => {
+  const logger = async(dataset: string, data: unknown[]) => {
+    const result = await ofetch(`https://api.axiom.co/v1/datasets/${dataset}/ingest`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.AXIOM_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return result;
+  };
+
   return {
     req,
     env,
+    logger,
   };
 };
 
 type Context = inferAsyncReturnType<typeof createContext>;
-
 const t = initTRPC.context<Context>().create();
 
 // // ┌─┐┬ ┬┌┬┐┬ ┬
